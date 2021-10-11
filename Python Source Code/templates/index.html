@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #table-wrapper {
+            position:relative;
+        }
+        #table-scroll-0 {
+            height: 220px;
+            overflow:auto;  
+            margin-top:20px;
+        }
+        #table-scroll-1 {
+            height: 240px;
+            overflow:auto;  
+            margin-top:20px;
+        }
+        #table-scroll-2 {
+            height: 175px;
+            overflow:auto;  
+            margin-top:20px;
+        }
+        #table-scroll-3 {
+            height: 100px;
+            overflow:auto;  
+            margin-top:20px;
+        }
+        #table-wrapper table {
+            width:100%;
+        }
+        #table-wrapper table * {
+            background:yellow;
+            color:black;
+        }
+        #table-wrapper table thead th .text {
+            position:absolute;   
+            top:-20px;
+            z-index:2;
+            height:20px;
+            width:35%;
+            border:1px solid red;
+        }
+        th {
+        text-align: center;
+        }
+    </style>
+    <title>Data Warehouse Statistic Report</title>
+</head>
+<body>
+    <h1>Data Warehouse Statistic Report</h1>
+    <h2>------------------------------------------------------------------------------------------------</h2>
+    <h2>Employee Salary and Perfomances of Company X in 2020</h2>
+    <h3>Statistic Table of Employee Salary and Perfomances</h3>
+    <p>This table contains about {{num_employee|safe}} Employee Records of Company X where contain items as described as in the table:</p>
+    <div id="table-wrapper">
+        <div id="table-scroll-0">
+            {% for table in tables_employee %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
+    <p>Apart from the employee records, several plots were generated that describe what and how many variables make up the employee data.</p>
+    <P>>Marital Status: This Pie Chart shows the Marital Status that makes up the {{num_employee|safe}} employee of company X from Single status to widowed status.</P>
+    <p>>Department Distribution: This Pie chart shows how many employees occupy a department in company X and how their distribution is formed by {{num_employee|safe}} employee of company X </p>
+    <p>>Gender Diversity: This Pie chart shows how much Gender Diversity is in company X and the ratio between men and women in that company.</p>
+    <p>>Productivity Effectiveness: This Pie Chart shows how many employees who is effective 100% or more in terms of their Productivity. Which is also shows how many employee who are less effective in their Effectiveness.</p>
+    <img src="{{url_for('static', filename='marital_report.png')}}" >
+    <img src="{{url_for('static', filename='department_report.png')}}" >
+    <img src="{{url_for('static', filename='gender_report.png')}}" >
+    <img src="{{url_for('static', filename='productivity_report.png')}}" >
+    <h3>Salary Prediction Using Given Variable in the Previously Table</h3>
+    <p>By using the variables in the Salary and Performance table, we can predict salary using these variables. To predict salary, we will use a machine learning algorithm called linear regression. By using linear regression, machine learning will look for each given variable relationship and form statistics to predict the future value of salary by the given variable.</p>
+    <p>In creating this prediction machine, we will use Multiple Linear Regression because it's involve more than two variable.The steps to perform multiple linear regression are almost similar to that of simple linear regression. The difference lies in the evaluation. we can use it to find out which factor has the highest impact on the predicted output and how different variables relate to each other.</p>
+    <p>As said earlier, in case of multivariable linear regression, the regression model has to find the most optimal coefficients for all the attributes. To see what coefficients our regression model has chosen we can see through Table that contains coefficients related each to the salary.</p>
+    <div id="table-wrapper">
+        <div id="table-scroll-2">
+            {% for table in tables_salaryCoeff %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
+    <p>It was shown that, almost everypart of the variable from Salary and Perfomances Table have considerable impact to the linear regression. But one noted that Gender have smallest contribution than other variable and we can consider to drop it from variable for prediction.</p>
+    <p> </p>
+    <p>The final step is to evaluate the performance of model that we created. This step is particularly important to compare how well different algorithms perform on a particular dataset. For regression algorithms, three evaluation metrics are commonly used as follows on these table:</p>
+    <div id="table-wrapper">
+        <div id="table-scroll-3">
+            {% for table in tables_salaryScore %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
+    <p>As can see that the value of root mean squared error is {{rmse_salaryScore|safe}}, which is slightly greater than 10% of the mean value of the salary of all employee. This means that model that created was not very accurate but can still make reasonably good predictions.</p>
+    <p>Finally, we can see the prediction results for the testing variables that have been given and compare them to the actual numbers of salaries in the following table.</p>
+    <div id="table-wrapper">
+        <div id="table-scroll-0">
+            {% for table in tables_salaryPrediction %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
+    <h2>------------------------------------------------------------------------------------------------</h2>
+    <h2>House Sales Records</h2>
+    <h3>Statistic Table of House Sales Records</h3>
+    <p>This table contains about {{num_houses_records|safe}} Houses Sales Records where contain items as described as in the table:</p>
+    <div id="table-wrapper">
+        <div id="table-scroll-1">
+            {% for table in tables_houses %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
+    <p>Apart from the House Sales Records, several plots were generated that describe what and how many variables make up the houses records data.</p> 
+    <P>>Grade Counts: This Histogram chart shows count how many house based of it's grade and show differences in histogram from grade 1 to 12. </P>
+    <p>>Built Year Counts: This Histogram chart shows count how many house built by it's year and show differences in built house from 1900 to 2015.</p>
+    <p>>Price Distribution: This Box Plot chart shows price distribution among {{num_houses_records|safe}} house prices. </p>
+    <p>>Years for Most Built Homes: This Word Cloud shows shows how many number of years there are in the data and forms a word cloud set of the most outgoing year to the least outgoing year. </p>
+    <img src="{{url_for('static', filename='grade_report.png')}}" >
+    <img src="{{url_for('static', filename='built_count_report.png')}}" >
+    <img src="{{url_for('static', filename='price_dist_report.png')}}" >
+    <img src="{{url_for('static', filename='built_year_report.png')}}" >
+    <h3>House Price Prediction Using Given Variable in the Previously Table</h3> 
+    <p>By using the variables in the House Sales Records table, we can predict house price using these variables. To predict price, we will use a machine learning algorithm called linear regression. By using linear regression, machine learning will look for each given variable relationship and form statistics to predict the future value of house price by the given variable.</p>
+    <p>In creating this prediction machine, we will use Multiple Linear Regression because it's involve more than two variable.The steps to perform multiple linear regression are almost similar to that of simple linear regression. The difference lies in the evaluation. we can use it to find out which factor has the highest impact on the predicted output and how different variables relate to each other.</p>
+    <p>As said earlier, in case of multivariable linear regression, the regression model has to find the most optimal coefficients for all the attributes. To see what coefficients our regression model has chosen we can see through Table that contains coefficients related each to the salary.</p>
+    <div id="table-wrapper">
+        <div id="table-scroll-2">
+            {% for table in tables_priceCoeff %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
+    <p>It was shown that, almost everypart of the variable from House Sales Records Table have considerable impact to the linear regression. But one noted that sqft_lot and sqft_lot15, both of them have smallest contribution than other variable and we can consider to drop them from variable for prediction.</p>
+    <p> </p>
+    <p>The final step is to evaluate the performance of model that we created. This step is particularly important to compare how well different algorithms perform on a particular dataset. For regression algorithms, three evaluation metrics are commonly used as follows on these table:</p>
+    <div id="table-wrapper">
+        <div id="table-scroll-3">
+            {% for table in tables_priceScore %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
+    <p>As can see that the value of root mean squared error is {{rmse_priceScore|safe}}, which is slightly greater than 10% of the mean value of the prices of all houses. This means that model that created was not very accurate but can still make reasonably good predictions.</p>
+    <p>Finally, we can see the prediction results for the testing variables that have been given and compare them to the actual numbers of prices in the following table.</p>
+    <div id="table-wrapper">
+        <div id="table-scroll-0">
+            {% for table in tables_pricePrediction %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>
